@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const containerStyle = {
   display: "flex",
@@ -10,7 +11,17 @@ const starContainerStyle = {
   display: "flex",
 };
 
-export default function StartRating({
+// A better approach would be to use TypeScript for type safety
+StarRating.propTypes = {
+  maxRating: PropTypes.number,
+  color: PropTypes.string,
+  size: PropTypes.number,
+  className: PropTypes.string,
+  defaultRating: PropTypes.number,
+  onSetRating: PropTypes.func,
+};
+
+export default function StarRating({
   maxRating = 5,
   color = "#f39c12",
   size = 48,
