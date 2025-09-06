@@ -55,18 +55,23 @@ const KEY = "2999647d";
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const query = "interstellar";
 
   // This effect will run only once AFTER the initial render
   // without useEffect() the fetching process will cause infinite re-renders
   useEffect(() => {
+    // useEffect's callback function can't be async function
     async function fetchMovies() {
+      setIsLoading(true);
+
       const res = await fetch(
         `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
       );
-
       const data = await res.json();
+
       setMovies(data.Search);
+      setIsLoading(false);
     }
 
     fetchMovies();
@@ -81,9 +86,7 @@ export default function App() {
       </NavBar>
 
       <Main>
-        <Box>
-          <MovieList movies={movies} />
-        </Box>
+        <Box>{isLoading ? <Loading /> : <MovieList movies={movies} />}</Box>
 
         <Box>
           <WatchedSummary watched={watched} />
@@ -92,6 +95,10 @@ export default function App() {
       </Main>
     </>
   );
+}
+
+function Loading() {
+  return <p className="loader">Loading ...</p>;
 }
 
 function NavBar({ children }) {
